@@ -1,4 +1,6 @@
 import speech_recognition as sr
+import commandFunctions
+import generateURL
 
 #enter the name of usb microphone that you found
 #using lsusb
@@ -15,7 +17,7 @@ r = sr.Recognizer()
 
 #generate a list of all audio cards/microphones
 mic_list = sr.Microphone.list_microphone_names()
- 
+
 #the following loop aims to set the device ID of the mic that
 #we specifically want to use to avoid ambiguity.
 for i, microphone_name in enumerate(mic_list):
@@ -30,18 +32,35 @@ with sr.Microphone(device_index = device_id, sample_rate = sample_rate,
     #wait for a second to let the recognizer adjust the
     #energy threshold based on the surrounding noise level
     r.adjust_for_ambient_noise(source)
-    print("Say Something")
-    #listens for the user's input
-    audio = r.listen(source)
 
-    try:
-        text = r.recognize_google(audio)
-        print("you said: " + text)
+    text = ""
+    while True:
+        print("Say Something")
+        #listens for the user's input
+        audio = r.listen(source)
 
-    #error occurs when google could not understand what was said
+        try:
+            text = r.recognize_google(audio)
+            print("you said: " + text)
 
-    except sr.UnknownValueError:
-        print("Google Speech Recognition could not understand audio")
+        #error occurs when google could not understand what was said
 
-    except sr.RequestError as e:
-        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+        except sr.UnknownValueError:
+            print("Google Speech Recognition could not understand audio")
+
+        except sr.RequestError as e:
+            print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+
+        ## take appropriate action according to text
+        text_list = text.split()
+
+        if text == "exit":
+            break
+        elif text == "Browser":
+            commandFunctions.open_browser()
+
+        if len(text_list) > 1 :
+            if text_list[0] == "Play":
+                    str = ' '.join(text_list[1:])
+                    commandFunctions.open_browser(generateURL.generateURL(str))
