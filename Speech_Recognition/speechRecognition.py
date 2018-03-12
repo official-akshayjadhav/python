@@ -17,6 +17,8 @@ r = sr.Recognizer()
 
 #generate a list of all audio cards/microphones
 mic_list = sr.Microphone.list_microphone_names()
+#mic_name = "HDA Intel PCH: ALC3234 Analog (hw:0,0)"
+mic_name = ''.join(mic_list[0])
 
 #the following loop aims to set the device ID of the mic that
 #we specifically want to use to avoid ambiguity.
@@ -38,7 +40,8 @@ with sr.Microphone(device_index = device_id, sample_rate = sample_rate,
         print("Say Something")
         #listens for the user's input
         audio = r.listen(source)
-
+        print("audio type : ")
+        print(type(audio))
         try:
             text = r.recognize_google(audio)
             print("you said: " + text)
@@ -58,9 +61,10 @@ with sr.Microphone(device_index = device_id, sample_rate = sample_rate,
         if text == "exit":
             break
         elif text == "Browser":
-            commandFunctions.open_browser()
+            commandFunctions.open_browser("https://www.google.com")
 
         if len(text_list) > 1 :
-            if text_list[0] == "Play":
+            if (text_list[0] == "Play") or (text_list[0] == "play"):
                     str = ' '.join(text_list[1:])
-                    commandFunctions.open_browser(generateURL.generateURL(str))
+                    str = ''+generateURL.generateURL(str)
+                    commandFunctions.open_browser(str)
