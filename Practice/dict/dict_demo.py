@@ -4,3 +4,4 @@ print(color_dict['brown']);
 
 vals = color_dict.values();
 print(vals[0]);
+raise ValueError
