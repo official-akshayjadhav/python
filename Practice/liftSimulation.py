@@ -13,3 +13,4 @@ while(True):
 	
 		else: print("lift going from-to: ", "->".join(str(e) for e in floors[lift:inp-1:-1]))
 		lift = inp
+ 
