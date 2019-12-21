@@ -1,0 +1,1 @@
+resources to learn python
